@@ -1,5 +1,5 @@
 # NPS
-NOCH's Port Scanner (NPS), a basic port enumeration CLI tool written in python3.
+NOCH's Port Scanner (NPS), a basic port enumeration CLI tool written in Python3.
 
 # Prerequisites
 * This script will work on windows, but uses UNIX based escape codes for colour outputs.
