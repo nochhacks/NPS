@@ -1,0 +1,165 @@
+#!/usr/bin/env python3
+
+import argparse, socket, re, threading, time
+from colorama import Fore
+from sys import exit
+import progressbar
+
+totalPorts = []
+openPorts = []
+
+def scan(host, port):
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(2)
+
+    result = s.connect_ex((host,port))
+
+    if result == 0:
+        #print(Fore.GREEN + "[+] " + str(port) + " OPEN")
+        openPorts.append(port)
+
+    s.close()
+
+# Check PORT is valid (between 1 and 65535) #
+def validPort(port):
+
+    portInt = int(port)
+
+    if portInt <= 65535 and portInt >= 1:
+        return True
+    else:
+        return False
+
+# Check supplied HOST IP against REGEX #
+def validIP(host):
+
+    if re.search(regex, host):
+        return True
+    elif host == "localhost":
+        return True
+    else:
+        return False
+
+# Check type of PORT input (Range, List or Single) #
+def checkPortInput(port_input):
+
+    # RANGE of ports validation #
+    if "-" in port_input:
+        count = port_input.count("-")
+
+        if count != 1:
+            print(Fore.RED + "\nIncorrect usage of port range!\n")
+            exit(0)
+
+        s1 = port_input.split("-")
+
+        if not s1[0] and not s1[1]:
+            int1 = 1
+            int2 = 65535
+        else:
+            try:
+                int1 = int(s1[0])
+                int2 = int(s1[1])
+            except ValueError:
+                print(Fore.RED + "\nNon integers found in supplied port range")
+
+        if int1 > int2:
+            print(Fore.RED + "\nStart of range is bigger than end of range\n")
+            exit(0)
+        elif int1 == int2:
+            print(Fore.RED + "\nStart of range cannot equal end of range\n")
+            exit(0)
+
+        if not validPort(int1) or not validPort(int2):
+            print(Fore.RED + "\nPort(s) out of range (1-65535)\n")
+            exit(0)
+
+        type = "range"
+
+    # LIST of ports validation #
+    elif "," in port_input:
+        type = "list"
+        ports = port_input.split(",")
+
+        for x in ports:
+            try:
+                y = int(x)
+            except ValueError:
+                print(Fore.RED + "\nNon integers found in supplied port(s)\n")
+                exit(0)
+            if not validPort(y):
+                print(Fore.RED + "\nOne or more ports out of range in list (1-65535)\n")
+                exit(0)
+
+    # SINGLE port validation #
+    else:
+        type = "single"
+        if not validPort(port_input):
+            print(Fore.RED + "\nPort out of range (1-65535)\n")
+            exit(0)
+
+    return(type)
+
+def main(port, host):
+
+    if not validIP(host):
+        print(Fore.RED + "\nInvalid host IP supplied.\n")
+        exit(0)
+
+    if host == "localhost":
+        host = "127.0.0.1"
+
+    type = checkPortInput(port)
+    length = 0
+
+    if type == "single":
+        portInt = int(port)
+        scan(host, portInt)
+        length += 1
+    elif type == "list":
+        ports = port.split(",")
+        for x in ports:
+            length += 1
+            portInt = int(x)
+            scan(host, portInt)
+    elif type == "range":
+        ports = port.split("-")
+        if not ports[0] and not ports[1]:
+            start = int(1)
+            end = int(65535)
+        else:
+            start = int(ports[0])
+            end = int(ports[1]) + 1
+
+        total = end - (start - 1)
+        pbar = progressbar.ProgressBar(max_value=total).start()
+
+        for x in range(start, end):
+            prog = start + (x - 1)
+            length += 1
+            portInt = int(x)
+            scan(host, portInt)
+            pbar.update(prog)
+
+    print("\n")
+    print("="*40)
+    print(" NOCH's PORT SCANNER")
+    print("="*40)
+    print(" [PORT]\t\t[STATUS]")
+
+    for x in openPorts:
+        print(Fore.GREEN + "  " + str(x) + "\t\t OPEN")
+
+    print(Fore.WHITE + "=" * 40)
+    print(f" {len(openPorts)} \ {length} open ports.")
+    print(Fore.WHITE + "=" * 40)
+    print("\n")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(usage='./portscan.py -p {PORTS} {HOST}')
+    parser.add_argument("-p", "--port", type=str, help="Port(s) to scan [Range: 1-65535, List: 1,2,3, Single: 80]")
+    parser.add_argument("host", type=str, help="Host IP to scan")
+    args = parser.parse_args()
+    regex = "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$"
+    main(args.port, args.host,)
