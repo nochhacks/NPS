@@ -25,7 +25,7 @@ Give the script execute permissions so you can run it from the console.
 <pre>chmod +x NPS</pre>
 
 If you want to be able to run the NPS command from anywhere in the terminal, you need to add the file location to the PATH variable. Add this line to the bottom of your .bashrc file:
-<pre>export PATH=/home/path-to-b64-script:$PATH</pre>
+<pre>export PATH=/home/path-to-NPS-script:$PATH</pre>
 
 You also need to grab these 2 modules, if you haven't got them already:
 <pre>pip3 install colorama</pre>
