@@ -36,7 +36,7 @@ You can execute the script from the DOS terminal; just go to the directory the "
 # Usage
 
 <pre>
-USAGE: NPS -p- {host}
+USAGE: NPS -p [ports] {host}
 
 positional arguments:
   host                  Host IP to scan
