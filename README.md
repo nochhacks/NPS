@@ -16,6 +16,7 @@ Get the script on your local machine by either:
 
 2) Download the ZIP file directly from the "Code" drop down on the page, and unzip it.
 
+
 <b>(Linux Only!)</b>
 
 Give the script execute permissions so you can run it from the console.
