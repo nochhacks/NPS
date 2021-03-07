@@ -38,7 +38,7 @@ See how to do this <a href="https://datatofish.com/add-python-to-windows-path/">
 You also need both <a href="https://pypi.org/project/progressbar2/">progressbar2<a> and <a href="https://pypi.org/project/colorama/">colorama<a> modules. You can manually install them with the links, or use pip3 from the DOS terminal using the same commands as above.
 
 You can execute the script from the DOS terminal; just go to the directory the "NPS" file is held in:
-<pre>python b64 [option] "{string}" </pre>
+<pre>python NPS -p [ports] {host} </pre>
 
 # Usage
 
