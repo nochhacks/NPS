@@ -2,6 +2,7 @@
 NOCH's Port Scanner (NPS), a basic port enumeration CLI tool written in Python3.
 
 # Prerequisites
+* Python3 installation
 * This script will work on windows, but uses UNIX based escape codes for colour outputs.
 * Requires progressbar2 module
 * Requires colorama module
@@ -26,9 +27,15 @@ Give the script execute permissions so you can run it from the console.
 If you want to be able to run the NPS command from anywhere in the terminal, you need to add the file location to the PATH variable. Add this line to the bottom of your .bashrc file:
 <pre>export PATH=/home/path-to-b64-script:$PATH</pre>
 
+You also need to grab these 2 modules, if you haven't got them already:
+<pre>pip3 install colorama</pre>
+<pre>pip3 install progressbar2</pre>
+
 <b>(Windows Only!)</b>
 You should have Python added to PATH. 
 See how to do this <a href="https://datatofish.com/add-python-to-windows-path/">here</a>.
+
+You also need both <a href="https://pypi.org/project/progressbar2/">progressbar2<a> and <a href="https://pypi.org/project/colorama/">colorama<a> modules. You can manually install them with the links, or use pip3 from the DOS terminal using the same commands as above.
 
 You can execute the script from the DOS terminal; just go to the directory the "NPS" file is held in:
 <pre>python b64 [option] "{string}" </pre>
